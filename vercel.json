@@ -4,11 +4,14 @@
     "outputDirectory": "public",
     "functions": {
         "api/index.php": {
-            "runtime": "vercel-php@0.6.0",
-            "handler": "index.php"
+            "runtime": "vercel-php@0.7.2"
         }
     },
     "routes": [
+        {
+            "src": "/build/(.*)",
+            "dest": "/public/build/$1"
+        },
         {
             "src": "/public/(.*)",
             "dest": "/public/$1"
@@ -20,8 +23,8 @@
     ],
     "env": {
         "APP_ENV": "production",
-        "APP_DEBUG": "false",
-        "APP_URL": "https://dinas-lingkungan-hidup-git-main-ryanjiroos-projects.vercel.app/",
+        "APP_DEBUG": "true",
+        "APP_URL": "https://dinas-lingkungan-hidup-bxveqckvv-ryanjiroos-projects.vercel.app/",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -32,9 +35,10 @@
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
         "DB_CONNECTION": "pgsql",
-        "DB_HOST": "db.rbzaqlizausvrvogihux.supabase.co",
+        "DB_HOST": "aws-1-ap-southeast-1.pooler.supabase.com",
         "DB_PORT": "5432",
         "DB_DATABASE": "postgres",
-        "DB_USERNAME": "postgres"
+        "DB_USERNAME": "postgres.rbzaqlizausvrvogihux",
+        "DB_SSLMODE": "require"
     }
 }

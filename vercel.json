@@ -8,23 +8,14 @@
         }
     },
     "routes": [
-        
-        /* 1. Rute untuk Vite Assets (CSS/JS yang sudah di-build) */
-        /* Memastikan semua file di folder 'build' di public/build dapat diakses langsung */
         {
             "src": "/build/(.*)",
             "dest": "/public/build/$1"
         },
-        
-        /* 2. Rute untuk Asset Statis Lainnya (Gambar, JSON, Favicon, dll.) */
-        /* Perintah ini melayani file statis dengan ekstensi umum langsung dari root Vercel (yang merupakan folder public Laravel) */
         {
             "src": "/(.*\\.(?:css|js|jpe?g|gif|png|svg|ico|webp|json))",
             "dest": "/public/$1"
         },
-
-        /* 3. Rute Fallback ke Aplikasi PHP (Laravel) */
-        /* Semua request yang tidak cocok dengan rute statis akan diarahkan ke index.php */
         {
             "src": "/(.*)",
             "dest": "/api/index.php"
@@ -34,10 +25,7 @@
         "APP_ENV": "production",
         "APP_DEBUG": "true",
         "APP_URL": "https://dinas-lingkungan-hidup.vercel.app",
-        /* KRUSIAL: Menetapkan ASSET_URL agar Laravel/Vite me-render link absolut yang benar */
         "ASSET_URL": "https://dinas-lingkungan-hidup.vercel.app",
-        
-        /* Variabel Cache dan Log (Diperlukan oleh vercel-php) */
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
@@ -47,8 +35,6 @@
         "CACHE_DRIVER": "array",
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
-        
-        /* Konfigurasi Database (Sudah Benar) */
         "DB_CONNECTION": "pgsql",
         "DB_HOST": "aws-1-ap-southeast-1.pooler.supabase.com",
         "DB_PORT": "5432",

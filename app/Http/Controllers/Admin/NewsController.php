@@ -95,7 +95,7 @@ class NewsController extends Controller
             if ($news->image && Storage::disk('public')->exists($news->image)) {
                 Storage::disk('public')->delete($news->image);
             }
-            $imagePath = $request->file('image')->store('news', 'public');
+            $path = $request->file('image')->store('images/news', 'public');
         }
 
         $news->update([

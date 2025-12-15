@@ -40,9 +40,9 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
+'root' => public_path(), // Gambar akan disimpan langsung di public/
+        'url' => env('APP_URL').'/', // Ini akan menggunakan ASSET_URL/APP_URL di Vercel
+        'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],

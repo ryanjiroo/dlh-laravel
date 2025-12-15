@@ -1,0 +1,82 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": {
+    "view": {
+      "continuousHeight": 300,
+      "continuousWidth": 400
+    }
+  },
+  "data": {
+    "values": [
+      {
+        "Fasilitas": "TPA",
+        "Timbangan (Ton)": 12000.0
+      },
+      {
+        "Fasilitas": "Bank Sampah",
+        "Timbangan (Ton)": 523.09
+      },
+      {
+        "Fasilitas": "TPS3R",
+        "Timbangan (Ton)": 1500.0
+      }
+    ]
+  },
+  "layer": [
+    {
+      "mark": {
+        "innerRadius": 60,
+        "outerRadius": 120,
+        "type": "arc"
+      },
+      "encoding": {
+        "color": {
+          "field": "Fasilitas",
+          "type": "nominal"
+        },
+        "order": {
+          "field": "Timbangan (Ton)",
+          "sort": "descending"
+        },
+        "theta": {
+          "field": "Timbangan (Ton)",
+          "stack": true,
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "Fasilitas",
+            "type": "nominal"
+          },
+          {
+            "field": "Timbangan (Ton)",
+            "format": ".1f",
+            "title": "Total (Ton)",
+            "type": "quantitative"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "radius": 140,
+        "type": "text"
+      },
+      "encoding": {
+        "color": {
+          "value": "black"
+        },
+        "order": {
+          "field": "Timbangan (Ton)",
+          "sort": "descending"
+        },
+        "text": {
+          "field": "Timbangan (Ton)",
+          "format": ".1f",
+          "type": "quantitative"
+        }
+      }
+    }
+  ],
+  "title": "Persentase Timbangan Sampah Fasilitas (Semester 1, 2025)"
+}

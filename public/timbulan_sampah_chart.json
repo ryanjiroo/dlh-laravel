@@ -1,0 +1,111 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "config": {
+    "view": {
+      "continuousHeight": 300,
+      "continuousWidth": 400
+    }
+  },
+  "data": {
+    "values": [
+      {
+        "Kecamatan": "Selat",
+        "Timbulan Sampah (Ton/Tahun)": 13368125
+      },
+      {
+        "Kecamatan": "Bataguh",
+        "Timbulan Sampah (Ton/Tahun)": 8152275
+      },
+      {
+        "Kecamatan": "Kapuas Timur",
+        "Timbulan Sampah (Ton/Tahun)": 5819925
+      },
+      {
+        "Kecamatan": "Kapuas Kuala",
+        "Timbulan Sampah (Ton/Tahun)": 4144575
+      },
+      {
+        "Kecamatan": "Tamban Catur",
+        "Timbulan Sampah (Ton/Tahun)": 3140825
+      },
+      {
+        "Kecamatan": "Kapuas Murung",
+        "Timbulan Sampah (Ton/Tahun)": 2855175
+      },
+      {
+        "Kecamatan": "Kapuas Barat",
+        "Timbulan Sampah (Ton/Tahun)": 2503250
+      },
+      {
+        "Kecamatan": "Dadahup",
+        "Timbulan Sampah (Ton/Tahun)": 2341400
+      },
+      {
+        "Kecamatan": "Mantangai",
+        "Timbulan Sampah (Ton/Tahun)": 2095300
+      },
+      {
+        "Kecamatan": "Kapuas Tengah",
+        "Timbulan Sampah (Ton/Tahun)": 1827400
+      },
+      {
+        "Kecamatan": "Kapuas Hilir",
+        "Timbulan Sampah (Ton/Tahun)": 1782200
+      },
+      {
+        "Kecamatan": "Basarang",
+        "Timbulan Sampah (Ton/Tahun)": 1740900
+      },
+      {
+        "Kecamatan": "Mandau Talawang",
+        "Timbulan Sampah (Ton/Tahun)": 1718000
+      },
+      {
+        "Kecamatan": "Timapah",
+        "Timbulan Sampah (Ton/Tahun)": 1600725
+      },
+      {
+        "Kecamatan": "Paser Kuala",
+        "Timbulan Sampah (Ton/Tahun)": 1566100
+      },
+      {
+        "Kecamatan": "Pulau Petak",
+        "Timbulan Sampah (Ton/Tahun)": 1475725
+      },
+      {
+        "Kecamatan": "Jelapat",
+        "Timbulan Sampah (Ton/Tahun)": 1400000
+      }
+    ]
+  },
+  "mark": "bar",
+  "encoding": {
+    "tooltip": [
+      {
+        "field": "Kecamatan",
+        "type": "nominal"
+      },
+      {
+        "field": "Timbulan Sampah (Ton/Tahun)",
+        "format": ",.0f",
+        "type": "quantitative"
+      }
+    ],
+    "x": {
+      "axis": {
+        "labelAngle": -45,
+        "labelOverlap": false,
+        "title": "Kecamatan"
+      },
+      "field": "Kecamatan",
+      "sort": "-y",
+      "type": "nominal"
+    },
+    "y": {
+      "field": "Timbulan Sampah (Ton/Tahun)",
+      "title": "Timbulan Sampah (Ton/Tahun)",
+      "type": "quantitative"
+    }
+  },
+  "title": "Estimasi Timbulan Sampah per Kecamatan (Ton/Tahun, 2025)"
+}

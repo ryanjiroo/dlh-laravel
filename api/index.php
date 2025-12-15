@@ -1,5 +1,8 @@
 <?php
 
+// Load environment variables from Vercel env vars
+require_once __DIR__ . '/env-loader.php';
+
 // This file is the entry point for Vercel's PHP runtime
 // It handles all requests and routes them to Laravel's public/index.php
 

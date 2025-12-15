@@ -1,29 +1,37 @@
 @extends('layouts.app')
 
-@section('title', $article->title)
+@section('title', $berita->title)
 
 @section('content')
-    <section class="mt-20 pb-16 px-4 md:px-12 lg:px-20 min-h-screen max-w-4xl mx-auto"> 
-        <div class="text-center mb-10">
-            <h1 class="text-4xl font-extrabold text-primary font-montserrat mb-3">{{ $article->title }}</h1>
-            <p class="text-sm text-gray-500">
-                Oleh: {{ $article->author }} | Tanggal: {{ $article->created_at->translatedFormat('d F Y') }}
-            </p>
-        </div>
+    <section class="py-16 px-4 md:px-12 lg:px-20 min-h-screen bg-gray-50"> 
+        <div class="max-w-4xl mx-auto bg-white p-8 rounded-xl shadow-lg">
+            
+            <h1 class="text-4xl font-extrabold text-gray-900 font-montserrat mb-4">{{ $berita->title }}</h1>
+            <div class="text-sm text-gray-500 mb-6 border-b pb-4">
+                Dipublikasikan oleh <strong>{{ $berita->author }}</strong> pada {{ \Carbon\Carbon::parse($berita->created_at)->translatedFormat('d F Y') }}
+            </div>
 
-        <div class="mb-8 rounded-xl overflow-hidden shadow-lg">
-            {{-- Pemanggilan Gambar Berita --}}
-            <img src="{{ $article->image ? asset('storage/' . $article->image) : asset('default_news.jpg') }}" 
-                 alt="{{ $article->title }}" 
-                 class="w-full h-96 object-cover">
-        </div>
+            {{-- KRUSIAL: Menggunakan asset() untuk path gambar database --}}
+            @if ($berita->image)
+                <div class="mb-8 overflow-hidden rounded-lg shadow-md">
+                    <img 
+                        src="{{ asset($berita->image) }}" 
+                        alt="{{ $berita->title }}" 
+                        class="w-full h-auto object-cover" 
+                        style="max-height: 400px;"
+                    >
+                </div>
+            @endif
 
-        <div class="prose max-w-none text-dlh-dark leading-relaxed">
-            {!! nl2br(e($article->content)) !!} 
-        </div>
+            <div class="prose max-w-none text-lg text-gray-700">
+                {{-- Asumsi konten berita tersimpan sebagai HTML --}}
+                {!! $berita->content !!}
+            </div>
 
-        <div class="mt-12 pt-6 border-t border-gray-200">
-            <a href="{{ route('news.index') }}" class="text-primary font-medium hover:text-opacity-80">&larr; Kembali ke Daftar Berita</a>
+            <div class="mt-10 pt-6 border-t">
+                <a href="{{ route('berita') }}" class="text-primary hover:text-secondary font-medium transition duration-150">&larr; Kembali ke Daftar Berita</a>
+            </div>
+
         </div>
     </section>
 @endsection

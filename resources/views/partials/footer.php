@@ -2,7 +2,7 @@
     <div class="flex flex-col items-center">
         <div class="flex flex-col items-center mb-4">
              <img src="/dlhLogo.png" alt="DLH Logo" class="h-12">
-            <p class="text-base font-bold text-primary font-montserrat mt-1 leading-none">Dinas Lingkungan Hidup</p>
+            <p class="text-base font-bold text-primary font-montserrat mt-1 leading-none">Dinas Lingkungan Hidup dan Kehutanan</p>
         </div>
         <p class="text-sm text-gray-400 mb-6">Beyond Clean & Green</p>
         
@@ -20,7 +20,7 @@
         </div>
         
         <p class="text-xs text-gray-600">
-            © 2025 Dinas Lingkungan Hidup Kapuas
+            © 2025 Dinas Lingkungan Hidup dan Kehutanan
         </p>
     </div>
 </footer>

@@ -11,10 +11,14 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $articles = News::orderBy('created_at', 'desc')->get();
+        // Mengambil semua berita (diurutkan dari yang terbaru)
+        $news = News::orderBy('created_at', 'desc')->get();
+        
+        // Mengambil data feedback
         $feedbacks = Feedback::orderBy('created_at', 'desc')->get();
         $unreadFeedbackCount = Feedback::where('is_read', false)->count();
 
-        return view('pages.dashboard', compact('articles', 'feedbacks', 'unreadFeedbackCount'));
+        // Mengirimkan variabel 'news' ke view
+        return view('pages.dashboard', compact('news', 'feedbacks', 'unreadFeedbackCount'));
     }
 }

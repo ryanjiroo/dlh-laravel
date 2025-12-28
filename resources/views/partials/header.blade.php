@@ -31,7 +31,7 @@
         <ul class="flex flex-col space-y-2 text-base">
             <li><a href="{{ route('home') }}" class="block px-2 py-1 font-medium text-dlh-dark hover:text-primary hover:bg-gray-50 rounded @if(request()->is('/')) text-primary font-semibold @endif">Home</a></li>
             <li><a href="{{ route('news.index') }}" class="block px-2 py-1 font-medium text-dlh-dark hover:text-primary hover:bg-gray-50 rounded @if(request()->is('berita*')) text-primary font-semibold @endif">Berita</a></li>
-            <li><a href="#" class="block px-2 py-1 font-medium text-dlh-dark hover:text-primary hover:bg-gray-50 rounded">Divisi</a></li>
+            <li><a href="{{ route('divisi.index') }}" class="block px-2 py-1 font-medium text-dlh-dark hover:text-primary hover:bg-gray-50 rounded">Divisi</a></li>
             <li><a href="#" class="block px-2 py-1 font-medium text-dlh-dark hover:text-primary hover:bg-gray-50 rounded">Feedback</a></li>
         </ul>
         <a href="{{ route('login') }}" class="block mt-4 text-center bg-accent text-dlh-dark px-5 py-2 rounded-xl font-semibold hover:bg-opacity-80 transition-colors">Log In</a>

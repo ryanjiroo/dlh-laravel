@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Environmental Department Dashboard')
+@section('title', 'Dashboard')
 
 @section('content')
 <div class="flex min-h-screen">
     {{-- Sidebar ASLI Anda --}}
     <aside class="w-64 bg-background p-6 shadow-soft hidden lg:flex flex-col justify-between fixed top-0 h-screen"> 
         <div>
-            <h1 class="text-2xl font-bold text-primary mb-8 font-montserrat">Dinas Lingkungan Hidup</h1>
+            <h1 class="text-2xl font-bold text-primary mb-8 font-montserrat">Dinas Lingkungan Hidup dan Kehutanan</h1>
             <nav class="flex flex-col space-y-2">
                 <a class="flex items-center gap-3 px-4 py-2 rounded-xl bg-secondary text-text-primary font-bold" href="{{ route('dashboard') }}">
                     <span class="material-symbols-outlined">dashboard</span>

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {{-- Meta CSRF untuk operasi AJAX di Dashboard --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dinas Lingkungan Hidup')</title>
+    <title>@yield('title', 'Dinas Lingkungan Hidup dan Kehutanan')</title>
 
     {{-- Link Fonts dan Icons --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">

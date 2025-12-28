@@ -18,10 +18,24 @@ class PublicController extends Controller
     }
 
     // --- Berita Daftar ---
-    public function newsIndex()
+    public function newsIndex(Request $request)
     {
-        // Load semua berita yang diterbitkan dengan pagination
-        $news = News::where('status', 'Published')->orderBy('created_at', 'desc')->paginate(12);
+        $search = $request->input('search');
+
+        // Query dasar: hanya berita yang sudah dipublikasikan
+        $query = News::where('status', 'Published');
+
+        // Jika ada input pencarian, tambahkan kondisi WHERE
+        if ($search) {
+            $query->where(function($q) use ($search) {
+                $q->where('title', 'like', '%' . $search . '%')
+                  ->orWhere('excerpt', 'like', '%' . $search . '%');
+            });
+        }
+
+        // Ambil data dengan pagination dan tetap simpan parameter search di link halaman
+        $news = $query->orderBy('created_at', 'desc')->paginate(12)->withQueryString();
+
         return view('pages.berita', compact('news'));
     }
 

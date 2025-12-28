@@ -18,7 +18,7 @@ class NewsController extends Controller
 
     public function create()
     {
-        // View terpisah jika diperlukan
+        // View biasanya menyatu di dashboard atau ada route sendiri
     }
 
     public function store(Request $request)
@@ -33,10 +33,11 @@ class NewsController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('news', 'public');
+            // PERBAIKAN: Simpan ke 's3' (Supabase) karena Vercel Read-Only
+            $imagePath = $request->file('image')->store('news', 's3');
         }
 
-        // LOGIC SLUG UNIK: Memastikan slug tidak duplikat
+        // LOGIC SLUG UNIK
         $baseSlug = Str::slug($request->input('title'));
         $slug = $baseSlug;
         $count = 1;
@@ -61,7 +62,7 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
-        // View terpisah jika diperlukan
+        // View edit
     }
 
     public function update(Request $request, News $news)
@@ -74,15 +75,15 @@ class NewsController extends Controller
             'status' => 'required|in:Draft,Published',
         ]);
 
+        // Tetapkan path lama sebagai default
         $imagePath = $news->image;
         $newTitle = $request->input('title');
         
         // LOGIC SLUG UPDATE UNIK
-        $slug = $news->slug;
         $baseSlug = Str::slug($newTitle);
-        
-        // Hanya update slug jika judul berubah DAN slug yang dihasilkan berbeda dari slug saat ini
-        if ($baseSlug !== Str::beforeLast($news->slug, '-') || !News::where('slug', $baseSlug)->where('id', '!=', $news->id)->exists()) {
+        $slug = $news->slug;
+
+        if ($newTitle !== $news->title) {
             $slug = $baseSlug;
             $count = 1;
             while (News::where('slug', $slug)->where('id', '!=', $news->id)->exists()) {
@@ -92,10 +93,12 @@ class NewsController extends Controller
         }
         
         if ($request->hasFile('image')) {
-            if ($news->image && Storage::disk('public')->exists($news->image)) {
-                Storage::disk('public')->delete($news->image);
+            // Hapus foto lama di Supabase (disk s3) jika ada
+            if ($news->image) {
+                Storage::disk('s3')->delete($news->image);
             }
-            $path = $request->file('image')->store('images/news', 'public');
+            // PERBAIKAN: Simpan ke 's3' dan masukkan ke variabel $imagePath
+            $imagePath = $request->file('image')->store('news', 's3');
         }
 
         $news->update([
@@ -104,22 +107,18 @@ class NewsController extends Controller
             'excerpt' => $request->input('excerpt'),
             'content' => $request->input('content'),
             'author' => Auth::user()->name ?? 'Admin',
-            'image' => $imagePath,
+            'image' => $imagePath, // Pastikan menggunakan $imagePath terbaru
             'status' => $request->input('status'),
         ]);
 
         return redirect()->route('dashboard')->with('success', 'Berita berhasil diperbarui!');
     }
 
-    public function show(News $news)
-    {
-        // Rute publik sudah ada
-    }
-
     public function destroy(News $news)
     {
-        if ($news->image && Storage::disk('public')->exists($news->image)) {
-            Storage::disk('public')->delete($news->image);
+        // Hapus file dari Supabase sebelum menghapus data di database
+        if ($news->image) {
+            Storage::disk('s3')->delete($news->image);
         }
         
         $news->delete();

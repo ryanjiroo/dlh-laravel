@@ -28,11 +28,11 @@ class PublicController extends Controller
     // --- Berita Tunggal ---
     public function showNews($slug)
     {
-        $berita = News::where('slug', $slug)
+        $article = News::where('slug', $slug)
                     ->where('status', 'Published')
                     ->firstOrFail();
 
-        return view('pages.beritatunggal', compact('berita'));
+        return view('pages.beritatunggal', compact('article'));
     }
 
     // --- Submit Feedback ---

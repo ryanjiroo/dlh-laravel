@@ -14,12 +14,12 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-12">
             @forelse ($news as $article)
-            <div class="rounded-xl overflow-hidden shadow-lg bg-white">
-                {{-- Pemanggilan Gambar Berita --}}
-                <div class="h-44 bg-cover bg-no-repeat bg-center-top bg-[#ccc] flex-shrink-0"
-                    style="background-image: url('{{ $article->image ? asset('storage/' . $article->image) : asset('truckSampah.png') }}');">
+            <div class="rounded-xl overflow-hidden shadow-lg bg-white flex flex-col">
+                {{-- PERBAIKAN: Menggunakan Storage::disk('s3')->url() --}}
+                <div class="h-44 bg-cover bg-no-repeat bg-center flex-shrink-0"
+                    style="background-image: url('{{ $article->image ? Storage::disk('s3')->url($article->image) : asset('truckSampah.png') }}');">
                 </div>
-                <div class="bg-secondary p-4 min-h-[150px] flex flex-col justify-between">
+                <div class="bg-secondary p-4 flex-grow flex flex-col justify-between">
                     <div>
                         <h3 class="text-base font-semibold text-dlh-dark mb-2 leading-snug font-montserrat">{{ $article->title }}</h3>
                         <p class="text-sm text-[#555] leading-snug mb-3">{{ $article->excerpt }}</p>
@@ -28,7 +28,7 @@
                 </div>
             </div>
             @empty
-                <p>Tidak ada berita yang ditemukan.</p>
+                <p class="col-span-full text-center py-10">Tidak ada berita yang ditemukan.</p>
             @endforelse
         </div>
 

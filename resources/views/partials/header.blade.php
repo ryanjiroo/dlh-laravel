@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center w-full md:w-auto">
         <div class="flex items-center">
             <img src="{{ asset('dlhLogo.png') }}" alt="DLH Logo" class="h-10 mr-2"> 
-            <span class="text-xl font-semibold text-primary font-montserrat">Dinas Lingkungan Hidup</span>
+            <span class="text-xl font-semibold text-primary font-montserrat">Dinas Lingkungan Hidup dan Kehutanan</span>
         </div>
 
         {{-- Hamburger Button (Hanya tampil di Mobile) --}}

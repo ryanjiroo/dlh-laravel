@@ -23,9 +23,9 @@
             @forelse ($latestNews as $article)
             {{-- Card Berita dari Database --}}
             <div class="w-72 rounded-xl overflow-hidden text-left shadow-lg flex flex-col justify-between bg-white">
-                {{-- Pemanggilan Gambar Berita --}}
+                {{-- PERBAIKAN: Menggunakan Storage::disk('s3')->url() untuk Supabase --}}
                 <div class="h-44 bg-cover bg-center flex-shrink-0"
-                     style="background-image: url('{{ $article->image ? asset('storage/' . $article->image) : asset('berita1.jpg') }}');">
+                     style="background-image: url('{{ $article->image ? Storage::disk('s3')->url($article->image) : asset('truckSampah.png') }}');">
                 </div>
                 <div class="bg-secondary/90 p-4 flex-grow flex flex-col justify-center">
                     <h3 class="text-lg font-semibold mb-1 text-primary leading-snug font-montserrat">{{ $article->title }}</h3>
@@ -37,20 +37,20 @@
                 <p>Belum ada berita yang diterbitkan saat ini.</p>
             @endforelse
 
-            {{-- Placeholder cards (Dipotong agar data dinamis tampil) --}}
+            {{-- Placeholder cards jika berita kurang dari 4 --}}
             @if ($latestNews->count() < 4)
                 @for ($i = 0; $i < (4 - $latestNews->count()); $i++)
                     <div class="w-72 h-96 rounded-xl overflow-hidden text-left shadow-lg flex items-center justify-center bg-secondary">
-                        <img src="{{ asset('images/berita2.jpg') }}" alt="placeholder" class="w-36 h-36 object-cover">
+                        <img src="{{ asset('truckSampah.png') }}" alt="placeholder" class="w-36 h-36 object-cover opacity-20">
                     </div>
                 @endfor
             @endif
             
         </div>
-        <a href="{{ route('news.index') }}" class="bg-accent text-dlh-dark px-8 py-3 rounded-xl font-semibold hover:bg-opacity-80 transition-colors">Baca Selengkapnya</a>
+        <a href="{{ route('news.index') }}" class="bg-accent text-dlh-dark px-8 py-3 rounded-xl font-semibold hover:bg-opacity-80 transition-colors">Lihat Semua Berita</a>
     </section>
 
-    {{-- Saran/Feedback Section (Tidak Berubah) --}}
+    {{-- Saran/Feedback Section --}}
     <section class="flex flex-col lg:flex-row bg-secondary py-16 px-8 md:px-12 lg:px-20 gap-10">
         <div class="lg:w-1/2">
             @if (session('success'))
@@ -61,14 +61,9 @@
 
             <form method="POST" action="{{ route('feedback.submit') }}" class="feedback-form">
                 @csrf
-                <textarea name="message" class="w-full min-h-[200px] p-4 border-2 border-gray-300 rounded-xl resize-none text-base mb-4 bg-white text-dlh-dark placeholder-gray-500 focus:outline-none focus:border-primary @error('message') border-red-500 @enderror" placeholder="Tulis saranmu disini" required>{{ old('message') }}</textarea>
-                @error('message')
-                    <p class="text-red-500 text-sm mb-2">{{ $message }}</p>
-                @enderror
-                
-                <input type="text" name="sender_name" placeholder="Nama Anda (Opsional)" class="w-full p-3 border-2 border-gray-300 rounded-xl mb-4 bg-white text-dlh-dark placeholder-gray-500 focus:outline-none focus:border-primary">
-                <input type="email" name="sender_email" placeholder="Email Anda (Opsional)" class="w-full p-3 border-2 border-gray-300 rounded-xl mb-4 bg-white text-dlh-dark placeholder-gray-500 focus:outline-none focus:border-primary">
-
+                <textarea name="message" class="w-full min-h-[200px] p-4 border-2 border-gray-300 rounded-xl resize-none text-base mb-4 bg-white text-dlh-dark placeholder-gray-500 focus:outline-none focus:border-primary" placeholder="Tulis saranmu disini" required>{{ old('message') }}</textarea>
+                <input type="text" name="sender_name" placeholder="Nama Anda (Opsional)" class="w-full p-3 border-2 border-gray-300 rounded-xl mb-4 bg-white text-dlh-dark focus:outline-none focus:border-primary">
+                <input type="email" name="sender_email" placeholder="Email Anda (Opsional)" class="w-full p-3 border-2 border-gray-300 rounded-xl mb-4 bg-white text-dlh-dark focus:outline-none focus:border-primary">
                 <button type="submit" class="bg-accent text-dlh-dark py-3 rounded-xl font-semibold cursor-pointer w-full hover:bg-opacity-80 transition-colors border-none">Kirim saran</button>
             </form>
         </div>

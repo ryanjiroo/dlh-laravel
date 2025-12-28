@@ -29,7 +29,7 @@
             </div>
 
             <div class="mt-10 pt-6 border-t">
-                <a href="{{ route('berita') }}" class="text-primary hover:text-secondary font-medium transition duration-150">&larr; Kembali ke Daftar Berita</a>
+                <a href="{{ route('news.index') }}" class="text-primary hover:text-secondary font-medium transition duration-150">&larr; Kembali ke Daftar Berita</a>
             </div>
 
         </div>

@@ -13,6 +13,7 @@
                     <span class="material-symbols-outlined">dashboard</span>
                     <span>Dashboard</span>
                 </a>
+                /*
                 <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-secondary/50" href="#">
                     <span class="material-symbols-outlined">groups</span>
                     <span>Manage Divisions</span>
@@ -25,6 +26,7 @@
                     <span class="material-symbols-outlined">campaign</span>
                     <span>Manage Feedback</span>
                 </a>
+                */
             </nav>
         </div>
         {{-- Tombol Logout --}}

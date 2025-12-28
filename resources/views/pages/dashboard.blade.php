@@ -1,126 +1,205 @@
 @extends('layouts.app')
 
-@section('title', 'Admin Dashboard - Dinas Lingkungan Hidup')
+@section('title', 'Environmental Department Dashboard')
 
 @section('content')
-<section class="mt-20 pb-16 px-4 md:px-12 lg:px-20 min-h-screen bg-gray-50">
-    <div class="flex flex-col gap-8">
-        
-        {{-- Bagian Manajemen Berita --}}
-        <div class="p-6 bg-white rounded-xl shadow-md">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 font-montserrat">Manajemen Berita</h2>
-                <a href="{{ route('news.create') }}" class="bg-primary text-white px-5 py-2 rounded-lg hover:bg-opacity-90 transition shadow-sm">
-                    + Tambah Berita
+<div class="flex min-h-screen">
+    {{-- Sidebar ASLI Anda --}}
+    <aside class="w-64 bg-background p-6 shadow-soft hidden lg:flex flex-col justify-between fixed top-0 h-screen"> 
+        <div>
+            <h1 class="text-2xl font-bold text-primary mb-8 font-montserrat">Dinas Lingkungan Hidup</h1>
+            <nav class="flex flex-col space-y-2">
+                <a class="flex items-center gap-3 px-4 py-2 rounded-xl bg-secondary text-text-primary font-bold" href="{{ route('dashboard') }}">
+                    <span class="material-symbols-outlined">dashboard</span>
+                    <span>Dashboard</span>
                 </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-secondary/50" href="#">
+                    <span class="material-symbols-outlined">groups</span>
+                    <span>Manage Divisions</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-secondary/50" href="{{ route('news.index') }}">
+                    <span class="material-symbols-outlined">article</span>
+                    <span>Manage Articles</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-2 rounded-xl hover:bg-secondary/50" href="{{ route('feedback.index') }}">
+                    <span class="material-symbols-outlined">campaign</span>
+                    <span>Manage Feedback</span>
+                </a>
+            </nav>
+        </div>
+        {{-- Tombol Logout --}}
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit" class="flex items-center gap-3 w-full px-4 py-2 rounded-xl hover:bg-secondary/50 text-left">
+                <span class="material-symbols-outlined">logout</span>
+                <span>Logout</span>
+            </button>
+        </form>
+    </aside>
+    
+    {{-- Main Content ASLI Anda --}}
+    <main class="flex-1 p-6 lg:p-10 lg:ml-64"> 
+        <div class="max-w-7xl mx-auto">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-4xl font-bold text-text-primary font-montserrat">Dashboard</h1>
+                <button class="lg:hidden text-text-primary">
+                    <span class="material-symbols-outlined text-3xl">menu</span>
+                </button>
             </div>
-
-            @if(session('success'))
-                <div class="mb-4 p-3 bg-green-100 text-green-700 rounded-lg">
+            
+            @if (session('success'))
+                <div class="bg-primary/20 text-primary p-3 rounded-xl mb-4 text-center font-bold">
                     {{ session('success') }}
                 </div>
             @endif
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-100 text-gray-700 uppercase text-xs">
-                            <th class="p-3 border-b">Gambar</th>
-                            <th class="p-3 border-b">Judul</th>
-                            <th class="p-3 border-b">Status</th>
-                            <th class="p-3 border-b">Tanggal</th>
-                            <th class="p-3 border-b text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($news as $item)
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-b">
-                                @if ($item->image)
-                                    {{-- Mengambil URL dari Supabase S3 --}}
-                                    <img src="{{ Storage::disk('s3')->url($item->image) }}" class="w-16 h-12 object-cover rounded shadow-sm">
-                                @else
-                                    <div class="w-16 h-12 bg-gray-200 flex items-center justify-center rounded text-[10px] text-gray-400">No Image</div>
-                                @endif
-                            </td>
-                            <td class="p-3 border-b font-medium text-gray-800">
-                                {{ Str::limit($item->title, 60) }}
-                            </td>
-                            <td class="p-3 border-b text-sm">
-                                <span class="px-2 py-1 rounded-full {{ $item->status == 'Published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700' }}">
-                                    {{ $item->status }}
-                                </span>
-                            </td>
-                            <td class="p-3 border-b text-sm text-gray-500">
-                                {{ $item->created_at->translatedFormat('d M Y') }}
-                            </td>
-                            <td class="p-3 border-b">
-                                <div class="flex justify-center gap-3">
-                                    <a href="{{ route('news.edit', $item->id) }}" class="text-blue-600 hover:text-blue-800 font-medium">Edit</a>
-                                    <form action="{{ route('news.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">Hapus</button>
-                                    </form>
-                                </div>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="5" class="p-10 text-center text-gray-500 italic">Belum ada berita yang dibuat.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+            {{-- Summary Cards --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-soft border border-secondary/50">
+                    <h2 class="text-text-secondary text-lg font-medium mb-2">Total Articles</h2>
+                    <p class="text-4xl font-bold text-primary">{{ $articles->count() }}</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-soft border border-secondary/50">
+                    <h2 class="text-text-secondary text-lg font-medium mb-2">Feedback Count</h2>
+                    <p class="text-4xl font-bold text-primary">{{ $feedbacks->count() }}</p>
+                </div>
+                <div class="bg-white rounded-xl p-6 shadow-soft border border-secondary/50">
+                    <h2 class="text-text-secondary text-lg font-medium mb-2">Unread Feedback</h2>
+                    <p class="text-4xl font-bold text-primary">{{ $unreadFeedbackCount }}</p>
+                </div>
+            </div>
+
+            {{-- Manage Articles Table --}}
+            <div class="bg-white rounded-xl shadow-soft overflow-hidden mb-8">
+                <div class="p-6 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-text-primary">Manage Articles</h2>
+                    <button onclick="openAddModal()" class="bg-primary text-white font-bold py-2 px-4 rounded-xl flex items-center gap-2 hover:bg-opacity-90">
+                        <span class="material-symbols-outlined">add</span>
+                        <span>Add Article</span>
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-background border-b border-secondary/50">
+                                <th class="p-4 font-bold">Image</th>
+                                <th class="p-4 font-bold">Title</th>
+                                <th class="p-4 font-bold">Author</th>
+                                <th class="p-4 font-bold">Date</th>
+                                <th class="p-4 font-bold">Status</th>
+                                <th class="p-4 font-bold text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($articles as $article)
+                                <tr class="border-b border-secondary/30">
+                                    <td class="p-4">
+                                        {{-- PERBAIKAN: Mengambil URL dari S3 Supabase --}}
+                                        <img src="{{ $article->image ? Storage::disk('s3')->url($article->image) : asset('truckSampah.png') }}" 
+                                             alt="{{ $article->title }}" 
+                                             class="w-12 h-12 object-cover rounded-md">
+                                    </td>
+                                    <td class="p-4">{{ Str::limit($article->title, 40) }}</td>
+                                    <td class="p-4 text-text-secondary">{{ $article->author }}</td>
+                                    <td class="p-4 text-text-secondary">{{ $article->created_at->format('Y-m-d') }}</td>
+                                    <td class="p-4">
+                                        <span class="{{ $article->status === 'Published' ? 'bg-accent/50 text-text-primary' : 'bg-gray-200 text-gray-700' }} px-3 py-1 rounded-full text-sm font-medium">
+                                            {{ $article->status }}
+                                        </span>
+                                    </td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="openEditModal({{ $article }})" class="text-primary hover:text-opacity-80 font-bold">Edit</button>
+                                        <form method="POST" action="{{ route('news.destroy', $article->id) }}" class="inline ml-4" onsubmit="return confirm('Apakah Anda yakin ingin menghapus berita ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 font-bold">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            {{-- Manage Feedback Table --}}
+            <div class="bg-white rounded-xl shadow-soft overflow-hidden">
+                <div class="p-6 flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-text-primary">Manage Feedback</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-background border-b border-secondary/50">
+                                <th class="p-4 font-bold">User</th>
+                                <th class="p-4 font-bold">Feedback</th>
+                                <th class="p-4 font-bold">Date</th>
+                                <th class="p-4 font-bold text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($feedbacks as $feedback)
+                                <tr class="border-b border-secondary/30 @if(!$feedback->is_read) bg-secondary/20 @endif">
+                                    <td class="p-4 @if(!$feedback->is_read) font-bold @endif">{{ $feedback->sender_name ?? 'Anonim' }}</td>
+                                    <td class="p-4 text-text-secondary @if(!$feedback->is_read) font-semibold @endif">{{ Str::limit($feedback->message, 50) }}</td>
+                                    <td class="p-4 text-text-secondary">{{ $feedback->created_at->format('Y-m-d') }}</td>
+                                    <td class="p-4 text-right">
+                                        <button onclick="showFeedbackModal('{{ $feedback->id }}', '{{ addslashes($feedback->sender_name ?? 'Anonim') }}', '{{ addslashes($feedback->sender_email ?? '-') }}', '{{ addslashes($feedback->message) }}', {{ $feedback->is_read ? 'true' : 'false' }})" class="text-primary hover:text-opacity-80 font-bold">View</button>
+                                        <form method="POST" action="{{ route('feedback.destroy', $feedback->id) }}" class="inline ml-4">
+                                            @csrf @method('DELETE')
+                                            <button type="submit" class="text-red-500 hover:text-red-700 font-bold">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+    </main>
+</div>
 
-        {{-- Bagian Manajemen Feedback --}}
-        <div class="p-6 bg-white rounded-xl shadow-md">
-            <div class="flex justify-between items-center mb-6">
-                <h2 class="text-2xl font-bold text-gray-800 font-montserrat">Saran & Masukan</h2>
-                @if($unreadFeedbackCount > 0)
-                    <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadFeedbackCount }} Baru</span>
-                @endif
-            </div>
+@include('partials.modals.add_news')
+@include('partials.modals.edit_news')
+@include('partials.modals.show_feedback')
 
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-100 text-gray-700 uppercase text-xs">
-                            <th class="p-3 border-b">Pengirim</th>
-                            <th class="p-3 border-b">Pesan</th>
-                            <th class="p-3 border-b">Tanggal</th>
-                            <th class="p-3 border-b text-center">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($feedbacks as $fb)
-                        <tr class="{{ !$fb->is_read ? 'bg-blue-50' : '' }} hover:bg-gray-50 transition-colors">
-                            <td class="p-3 border-b">
-                                <div class="font-medium text-gray-800">{{ $fb->sender_name ?? 'Anonim' }}</div>
-                                <div class="text-xs text-gray-500">{{ $fb->sender_email ?? '-' }}</div>
-                            </td>
-                            <td class="p-3 border-b text-sm text-gray-600">
-                                {{ Str::limit($fb->message, 100) }}
-                            </td>
-                            <td class="p-3 border-b text-sm text-gray-500">
-                                {{ $fb->created_at->diffForHumans() }}
-                            </td>
-                            <td class="p-3 border-b text-center">
-                                <a href="{{ route('feedback.show', $fb->id) }}" class="text-primary hover:underline font-medium">Detail</a>
-                            </td>
-                        </tr>
-                        @empty
-                        <tr>
-                            <td colspan="4" class="p-10 text-center text-gray-500 italic">Belum ada saran yang masuk.</td>
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
-        </div>
+<script>
+    function openAddModal() { document.getElementById('addNewsModal').classList.remove('hidden'); }
+    
+    function openEditModal(article) {
+        document.getElementById('edit_id').value = article.id;
+        document.getElementById('edit_title').value = article.title;
+        document.getElementById('edit_excerpt').value = article.excerpt;
+        document.getElementById('edit_content').value = article.content;
+        document.getElementById('edit_status').value = article.status;
+        document.getElementById('editNewsForm').action = "{{ url('admin/news') }}" + "/" + article.id;
+        
+        const imagePreview = document.getElementById('current_image_preview');
+        if (article.image) {
+            // PERBAIKAN: Preview gambar edit menggunakan URL S3 jika tersedia
+            // (Note: Di JS, kita perlu cara dinamis untuk mendapatkan URL S3)
+            imagePreview.src = `https://rbzaqlizausvrvogihux.storage.supabase.co/storage/v1/object/public/news/${article.image}`;
+            imagePreview.classList.remove('hidden');
+        } else {
+            imagePreview.classList.add('hidden');
+        }
+        document.getElementById('editNewsModal').classList.remove('hidden');
+    }
 
-    </div>
-</section>
+    function showFeedbackModal(id, sender, email, message, isRead) {
+        document.getElementById('feedback-sender').innerText = sender;
+        document.getElementById('feedback-email').innerText = email;
+        document.getElementById('feedback-message').innerText = message; 
+        if (!isRead) {
+             const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+             fetch(`{{ url('admin/feedback') }}/${id}`, {
+                method: 'PUT',
+                headers: { 'X-CSRF-TOKEN': csrfToken, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ is_read: true })
+            }).then(() => window.location.reload());
+        }
+        document.getElementById('showFeedbackModal').classList.remove('hidden');
+    }
+</script>
 @endsection

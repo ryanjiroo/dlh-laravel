@@ -11,10 +11,24 @@ class FeedbackController extends Controller
     public function index()
     {
         $feedbacks = Feedback::orderBy('created_at', 'desc')->get();
-        // Akan dipanggil di DashboardController
-        return $feedbacks;
+        return view('admin.feedback.index', compact('feedbacks')); // Pastikan return view jika diakses langsung
     }
 
-    // Tambahkan fungsi view/show, markAsRead, destroy di sini
-    // ...
+    // Metode untuk menandai feedback sudah dibaca (Update)
+    public function update(Request $request, Feedback $feedback)
+    {
+        $feedback->update([
+            'is_read' => $request->is_read ?? true
+        ]);
+
+        return response()->json(['success' => true]);
+    }
+
+    // Metode untuk menghapus feedback (Destroy)
+    public function destroy(Feedback $feedback)
+    {
+        $feedback->delete();
+
+        return redirect()->back()->with('success', 'Feedback berhasil dihapus.');
+    }
 }

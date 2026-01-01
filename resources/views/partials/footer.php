@@ -4,7 +4,7 @@
              <img src="/dlhLogo.png" alt="DLH Logo" class="h-12">
             <p class="text-base font-bold text-primary font-montserrat mt-1 leading-none">Dinas Lingkungan Hidup dan Kehutanan</p>
         </div>
-        <p class="text-sm text-gray-400 mb-6">Beyond Clean & Green</p>
+        <p class="text-sm text-gray-400 mb-6">Pemerintah Kabupaten Kapuas</p>
         
         <ul class="flex justify-center space-x-6 list-none mb-6">
             <li><a href="{{ route('home') }}" class="text-gray-400 font-medium hover:text-primary">Home</a></li>

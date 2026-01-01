@@ -9,8 +9,8 @@
             style="background-image: url('{{ asset('background.png') }}');">
         </div>
         <div class="relative z-20">
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 font-montserrat tracking-tight">Dinas Lingkungan Hidup</h1>
-            <p class="text-lg sm:text-xl font-normal mb-8">Beyond Clean & Green</p>
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 font-montserrat tracking-tight">Dinas Lingkungan Hidup dan Kehtuanan</h1>
+            <p class="text-lg sm:text-xl font-normal mb-8">Pemerintah Kabupaten Kapuas</p>
             <a href="#berita-section" class="bg-accent text-dlh-dark px-10 py-3 rounded-xl text-lg font-semibold hover:bg-opacity-80 transition-colors">Explore</a>
         </div>
     </section>

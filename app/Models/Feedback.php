@@ -13,6 +13,7 @@ class Feedback extends Model
         'sender_name',
         'sender_email',
         'message',
+        'image',
         'is_read',
     ];
 

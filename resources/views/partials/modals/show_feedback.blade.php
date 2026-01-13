@@ -8,11 +8,17 @@
         <div class="mt-4 space-y-3 text-text-primary">
             <p><strong class="w-24 inline-block">Pengirim:</strong> <span id="feedback-sender"></span></p>
             <p><strong class="w-24 inline-block">Email:</strong> <span id="feedback-email"></span></p>
+            
+            {{-- Kontainer Lampiran Gambar --}}
+            <div id="feedback-image-container" class="hidden pt-3 border-t">
+                <p class="font-bold mb-2">Lampiran Gambar:</p>
+                <img id="feedback-image-preview" src="" alt="Lampiran Feedback" class="w-full max-h-64 object-contain rounded-lg border border-gray-200 shadow-sm">
+            </div>
+
             <div class="pt-3 border-t mt-4">
                 <p class="font-bold mb-2">Pesan:</p>
                 <div id="feedback-message" class="bg-background p-3 rounded-lg border border-gray-200 whitespace-pre-line text-sm"></div>
             </div>
-            
         </div>
         
         <div class="flex justify-end pt-4 border-t border-gray-200 mt-6">

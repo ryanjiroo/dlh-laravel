@@ -52,27 +52,26 @@ class PublicController extends Controller
     // --- Submit Feedback ---
     public function submitFeedback(Request $request)
     {
-        // Validasi: email wajib, image opsional
         $request->validate([
             'message' => 'required|string|max:1000',
             'sender_name' => 'nullable|string|max:100',
-            'sender_email' => 'required|email|max:100',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'sender_email' => 'required|email|max:100', // Sekarang wajib
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Tambahkan validasi gambar
         ]);
-
+    
         $imagePath = null;
         if ($request->hasFile('image')) {
-            // Simpan gambar ke folder feedback di disk s3 (Supabase)
+            // Simpan ke bucket Supabase folder 'feedback' menggunakan disk 's3'
             $imagePath = $request->file('image')->store('feedback', 's3');
         }
-
-        Feedback::create([
+    
+        \App\Models\Feedback::create([
+            'message' => $request->message,
             'sender_name' => $request->sender_name,
             'sender_email' => $request->sender_email,
-            'message' => $request->message,
-            'image' => $imagePath,
+            'image' => $imagePath, // Simpan path-nya
         ]);
-
+    
         return back()->with('success', 'Terima kasih atas saran Anda! Kami akan meninjaunya.');
     }
 }

@@ -13,7 +13,6 @@
                     <span class="material-symbols-outlined">dashboard</span>
                     <span>Dashboard</span>
                 </a>
-                {{-- Anda bisa menambahkan menu lain di sini --}}
             </nav>
         </div>
         <form method="POST" action="{{ route('logout') }}">
@@ -126,7 +125,6 @@
                                     <td class="p-4 text-text-secondary">{{ $feedback->created_at->format('d M Y') }}</td>
                                     <td class="p-4 text-right">
                                         @php
-                                            // Memastikan URL gambar dihasilkan dengan benar dari disk S3
                                             $feedbackImgUrl = $feedback->image ? Storage::disk('s3')->url($feedback->image) : '';
                                         @endphp
                                         <button onclick="showFeedbackModal('{{ $feedback->id }}', '{{ addslashes($feedback->sender_name ?? 'Anonim') }}', '{{ addslashes($feedback->sender_email ?? '-') }}', '{{ addslashes($feedback->message) }}', {{ $feedback->is_read ? 'true' : 'false' }}, '{{ $feedbackImgUrl }}')" class="text-primary hover:text-opacity-80 font-bold">View</button>
@@ -152,12 +150,10 @@
 @include('partials.modals.show_feedback')
 
 <script>
-    // Fungsi untuk membuka modal tambah berita
     function openAddModal() { 
         document.getElementById('addNewsModal').classList.remove('hidden'); 
     }
     
-    // Fungsi untuk membuka modal edit berita
     function openEditModal(article) {
         document.getElementById('edit_id').value = article.id;
         document.getElementById('edit_title').value = article.title;
@@ -168,7 +164,6 @@
         
         const imagePreview = document.getElementById('current_image_preview');
         if (article.image) {
-            // Menggunakan URL S3 Supabase untuk preview
             imagePreview.src = `https://rbzaqlizausvrvogihux.storage.supabase.co/storage/v1/object/public/news/${article.image}`;
             imagePreview.classList.remove('hidden');
         } else {
@@ -177,16 +172,23 @@
         document.getElementById('editNewsModal').classList.remove('hidden');
     }
 
-    // Fungsi untuk menampilkan modal detail feedback dan lampiran gambar
     function showFeedbackModal(id, sender, email, message, isRead, imageUrl) {
         document.getElementById('feedback-sender').innerText = sender;
         document.getElementById('feedback-email').innerText = email;
         document.getElementById('feedback-message').innerText = message; 
 
+        // Logika Tombol Balas Email
+        const replyBtn = document.getElementById('feedback-reply-btn');
+        if (email && email !== '-' && email !== 'null') {
+            replyBtn.href = `mailto:${email}?subject=Balasan Feedback: DLHK`;
+            replyBtn.classList.remove('hidden');
+        } else {
+            replyBtn.classList.add('hidden');
+        }
+
         const imgContainer = document.getElementById('feedback-image-container');
         const imgPreview = document.getElementById('feedback-image-preview');
         
-        // Cek apakah ada imageUrl dan valid
         if (imageUrl && imageUrl.trim() !== "" && imageUrl !== "null") {
             imgPreview.src = imageUrl;
             imgContainer.classList.remove('hidden');
@@ -195,7 +197,6 @@
             imgPreview.src = '';
         }
 
-        // Tandai sebagai sudah dibaca jika belum
         if (!isRead) {
              const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
              fetch(`{{ url('admin/feedback') }}/${id}`, {
@@ -206,8 +207,7 @@
                 },
                 body: JSON.stringify({ is_read: true })
             }).then(() => {
-                // Opsional: Reload untuk update status font tebal/tipis di tabel
-                window.location.reload();
+                // Status dibaca diperbarui di latar belakang
             });
         }
         document.getElementById('showFeedbackModal').classList.remove('hidden');

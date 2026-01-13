@@ -23,8 +23,14 @@
             </div>
         </div>
         
-        <div class="flex justify-end pt-4 border-t border-gray-200 mt-6">
-            <button onclick="document.getElementById('showFeedbackModal').classList.add('hidden')" class="bg-gray-300 text-text-primary font-bold py-2 px-4 rounded-xl hover:bg-gray-400">Tutup</button>
+        <div class="flex justify-end gap-3 pt-4 border-t border-gray-200 mt-6">
+            <button onclick="document.getElementById('showFeedbackModal').classList.add('hidden')" class="bg-gray-300 text-text-primary font-bold py-2 px-6 rounded-xl hover:bg-gray-400 transition-colors">Tutup</button>
+            
+            {{-- Tombol Balas --}}
+            <a id="feedback-reply-btn" href="#" class="bg-primary text-white font-bold py-2 px-6 rounded-xl hover:bg-opacity-90 flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">reply</span>
+                Balas
+            </a>
         </div>
     </div>
 </div>

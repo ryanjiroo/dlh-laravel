@@ -9,10 +9,11 @@
             <p><strong class="w-24 inline-block">Pengirim:</strong> <span id="feedback-sender"></span></p>
             <p><strong class="w-24 inline-block">Email:</strong> <span id="feedback-email"></span></p>
             
-            {{-- Kontainer Lampiran Gambar --}}
             <div id="feedback-image-container" class="hidden pt-3 border-t">
                 <p class="font-bold mb-2">Lampiran Gambar:</p>
-                <img id="feedback-image-preview" src="" alt="Lampiran Feedback" class="w-full max-h-64 object-contain rounded-lg border border-gray-200 shadow-sm">
+                <div class="w-full bg-gray-100 rounded-lg overflow-hidden flex justify-center p-2">
+                    <img id="feedback-image-preview" src="" alt="Lampiran" class="max-w-full max-h-80 object-contain rounded-md">
+                </div>
             </div>
 
             <div class="pt-3 border-t mt-4">

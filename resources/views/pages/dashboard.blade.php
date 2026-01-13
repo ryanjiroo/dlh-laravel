@@ -24,7 +24,6 @@
         </form>
     </aside>
     
-    {{-- Main Content --}}
     <main class="flex-1 p-6 lg:p-10 lg:ml-64"> 
         <div class="max-w-7xl mx-auto">
             <div class="flex justify-between items-center mb-8">
@@ -71,9 +70,6 @@
                             <tr class="bg-background border-b border-secondary/50">
                                 <th class="p-4 font-bold">Image</th>
                                 <th class="p-4 font-bold">Title</th>
-                                <th class="p-4 font-bold">Author</th>
-                                <th class="p-4 font-bold">Date</th>
-                                <th class="p-4 font-bold">Status</th>
                                 <th class="p-4 font-bold text-right">Actions</th>
                             </tr>
                         </thead>
@@ -81,20 +77,12 @@
                             @foreach ($articles as $article)
                                 <tr class="border-b border-secondary/30">
                                     <td class="p-4">
-                                        <img src="{{ $article->image ? Storage::disk('s3')->url($article->image) : asset('truckSampah.png') }}" 
-                                             class="w-12 h-12 object-cover rounded-md">
+                                        <img src="{{ $article->image ? Storage::disk('s3')->url($article->image) : asset('truckSampah.png') }}" class="w-12 h-12 object-cover rounded-md">
                                     </td>
                                     <td class="p-4">{{ Str::limit($article->title, 40) }}</td>
-                                    <td class="p-4 text-text-secondary">{{ $article->author }}</td>
-                                    <td class="p-4 text-text-secondary">{{ $article->created_at->format('Y-m-d') }}</td>
-                                    <td class="p-4">
-                                        <span class="{{ $article->status === 'Published' ? 'bg-accent/50 text-text-primary' : 'bg-gray-200 text-gray-700' }} px-3 py-1 rounded-full text-sm font-medium">
-                                            {{ $article->status }}
-                                        </span>
-                                    </td>
                                     <td class="p-4 text-right">
                                         <button onclick="openEditModal({{ $article }})" class="text-primary hover:text-opacity-80 font-bold">Edit</button>
-                                        <form method="POST" action="{{ route('news.destroy', $article->id) }}" class="inline ml-4" onsubmit="return confirm('Hapus berita ini?');">
+                                        <form method="POST" action="{{ route('news.destroy', $article->id) }}" class="inline ml-4" onsubmit="return confirm('Hapus berita?');">
                                             @csrf @method('DELETE')
                                             <button type="submit" class="text-red-500 hover:text-red-700 font-bold">Delete</button>
                                         </form>
@@ -117,19 +105,20 @@
                             <tr class="bg-background border-b border-secondary/50">
                                 <th class="p-4 font-bold">User</th>
                                 <th class="p-4 font-bold">Feedback</th>
-                                <th class="p-4 font-bold">Date</th>
                                 <th class="p-4 font-bold text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($feedbacks as $feedback)
                                 <tr class="border-b border-secondary/30 @if(!$feedback->is_read) bg-secondary/20 @endif">
-                                    <td class="p-4 @if(!$feedback->is_read) font-bold @endif">{{ $feedback->sender_name ?? 'Anonim' }}</td>
-                                    <td class="p-4 text-text-secondary @if(!$feedback->is_read) font-semibold @endif">{{ Str::limit($feedback->message, 50) }}</td>
-                                    <td class="p-4 text-text-secondary">{{ $feedback->created_at->format('Y-m-d') }}</td>
+                                    <td class="p-4">{{ $feedback->sender_name ?? 'Anonim' }}</td>
+                                    <td class="p-4">{{ Str::limit($feedback->message, 50) }}</td>
                                     <td class="p-4 text-right">
-                                        {{-- Tombol View diperbarui dengan parameter Image URL --}}
-                                        <button onclick="showFeedbackModal('{{ $feedback->id }}', '{{ addslashes($feedback->sender_name ?? 'Anonim') }}', '{{ addslashes($feedback->sender_email ?? '-') }}', '{{ addslashes($feedback->message) }}', {{ $feedback->is_read ? 'true' : 'false' }}, '{{ $feedback->image ? Storage::disk('s3')->url($feedback->image) : '' }}')" class="text-primary hover:text-opacity-80 font-bold">View</button>
+                                        {{-- PERBAIKAN: Memastikan URL Gambar Terkirim ke JS --}}
+                                        @php
+                                            $feedbackImageUrl = $feedback->image ? Storage::disk('s3')->url($feedback->image) : '';
+                                        @endphp
+                                        <button onclick="showFeedbackModal('{{ $feedback->id }}', '{{ addslashes($feedback->sender_name ?? 'Anonim') }}', '{{ addslashes($feedback->sender_email ?? '-') }}', '{{ addslashes($feedback->message) }}', {{ $feedback->is_read ? 'true' : 'false' }}, '{{ $feedbackImageUrl }}')" class="text-primary hover:text-opacity-80 font-bold">View</button>
                                         
                                         <form method="POST" action="{{ route('feedback.destroy', $feedback->id) }}" class="inline ml-4">
                                             @csrf @method('DELETE')
@@ -160,30 +149,23 @@
         document.getElementById('edit_content').value = article.content;
         document.getElementById('edit_status').value = article.status;
         document.getElementById('editNewsForm').action = "{{ url('admin/news') }}" + "/" + article.id;
-        
-        const imagePreview = document.getElementById('current_image_preview');
-        if (article.image) {
-            imagePreview.src = `https://rbzaqlizausvrvogihux.storage.supabase.co/storage/v1/object/public/news/${article.image}`;
-            imagePreview.classList.remove('hidden');
-        } else {
-            imagePreview.classList.add('hidden');
-        }
         document.getElementById('editNewsModal').classList.remove('hidden');
     }
 
-    // Fungsi showFeedbackModal diperbarui
+    // FUNGSI UTAMA SHOW FEEDBACK
     function showFeedbackModal(id, sender, email, message, isRead, imageUrl) {
         document.getElementById('feedback-sender').innerText = sender;
         document.getElementById('feedback-email').innerText = email;
         document.getElementById('feedback-message').innerText = message; 
 
-        // Tampilkan/sembunyikan gambar lampiran
         const imgContainer = document.getElementById('feedback-image-container');
         const imgPreview = document.getElementById('feedback-image-preview');
         
-        if (imageUrl) {
+        // Cek apakah ada URL gambar
+        if (imageUrl && imageUrl.trim() !== "") {
             imgPreview.src = imageUrl;
             imgContainer.classList.remove('hidden');
+            console.log("Loading image from:", imageUrl); // Debugging
         } else {
             imgContainer.classList.add('hidden');
             imgPreview.src = '';
